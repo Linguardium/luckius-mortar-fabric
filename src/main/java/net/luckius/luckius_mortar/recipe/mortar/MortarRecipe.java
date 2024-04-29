@@ -8,6 +8,7 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 
 public class MortarRecipe implements Recipe<Inventory> {
@@ -27,7 +28,7 @@ public class MortarRecipe implements Recipe<Inventory> {
 	}
 
 	@Override
-	public ItemStack craft(Inventory inventory, DynamicRegistryManager registryManager) {
+	public ItemStack craft(Inventory inventory, RegistryWrapper.WrapperLookup registriesLookup) {
 		return this.output.copy();
 	}
 
@@ -37,7 +38,7 @@ public class MortarRecipe implements Recipe<Inventory> {
 	}
 
 	@Override
-	public ItemStack getResult(DynamicRegistryManager registryManager) {
+	public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
 		return this.output;
 	}
 

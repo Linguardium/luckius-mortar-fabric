@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.luckius.luckius_mortar.datagen.recipe.ModRecipeGenerator;
 import net.luckius.luckius_mortar.datagen.tag.ModItemTags;
 import net.luckius.luckius_mortar.item.ModItems;
 import net.minecraft.registry.RegistryWrapper;
@@ -16,6 +17,7 @@ public class LuckiusMortarDatagen implements DataGeneratorEntrypoint {
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
         final FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
         pack.addProvider(ItemTagGenerator::new);
+        pack.addProvider(ModRecipeGenerator::new);
     }
 
     private static class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {

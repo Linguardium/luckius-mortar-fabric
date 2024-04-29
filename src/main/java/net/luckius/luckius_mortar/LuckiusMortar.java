@@ -26,8 +26,7 @@ public class LuckiusMortar implements ModInitializer {
 		Registry.register(Registries.SOUND_EVENT, ModSoundEvents.MORTAR_SOUND_CLICK_ID, ModSoundEvents.MORTAR_SOUND_CLICK);
 
 		// Register recipe type
-		Registry.register(Registries.RECIPE_TYPE, new Identifier(MOD_ID, "mortar"), ModRecipes.MORTAR_RECIPE);
-		Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(MOD_ID, "mortar"), ModRecipes.MORTAR_RECIPE_SERIALIZER);
+		ModRecipes.init();
 
 		// Register items
 		Registry.register(Registries.ITEM, new Identifier(MOD_ID, "wooden_mortar"), ModItems.WOODEN_MORTAR);

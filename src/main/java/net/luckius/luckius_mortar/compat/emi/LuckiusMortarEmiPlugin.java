@@ -1,4 +1,4 @@
-package net.luckius.luckius_mortar.emi;
+package net.luckius.luckius_mortar.compat.emi;
 
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
