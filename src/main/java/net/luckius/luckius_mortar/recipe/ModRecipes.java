@@ -8,7 +8,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
-import static net.luckius.luckius_mortar.LuckiusMortar.MOD_ID;
 import static net.luckius.luckius_mortar.LuckiusMortar.makeId;
 
 public class ModRecipes {
@@ -24,5 +23,5 @@ public class ModRecipes {
 
 	public static void init() {
 		// empty method used to classload
-	};
+	}
 }

@@ -3,7 +3,6 @@ package net.luckius.luckius_mortar.datagen.tag;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.luckius.luckius_mortar.item.ModItemTags;
-import net.luckius.luckius_mortar.item.ModItems;
 import net.luckius.luckius_mortar.item.custom.MortarItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;

@@ -1,6 +1,5 @@
 package net.luckius.luckius_mortar.registration;
 
-import net.luckius.luckius_mortar.sound.ModSoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;

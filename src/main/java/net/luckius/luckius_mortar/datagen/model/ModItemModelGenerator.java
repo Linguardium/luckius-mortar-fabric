@@ -2,8 +2,6 @@ package net.luckius.luckius_mortar.datagen.model;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
-import net.luckius.luckius_mortar.item.ModItems;
-import net.luckius.luckius_mortar.item.custom.MortarItem;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.client.Models;

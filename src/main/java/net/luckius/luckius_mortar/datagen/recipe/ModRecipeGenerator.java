@@ -3,10 +3,7 @@ package net.luckius.luckius_mortar.datagen.recipe;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
-import net.luckius.luckius_mortar.LuckiusMortar;
-import net.luckius.luckius_mortar.item.ModItems;
 import net.luckius.luckius_mortar.recipe.mortar.MortarRecipe;
-import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.item.Item;
@@ -18,7 +15,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
 
 import java.util.concurrent.CompletableFuture;
 
