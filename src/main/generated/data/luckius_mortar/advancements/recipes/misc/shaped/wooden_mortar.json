@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:wooden_mortar"
+        "recipe": "luckius_mortar:shaped/wooden_mortar"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:wooden_mortar"
+      "luckius_mortar:shaped/wooden_mortar"
     ]
   }
 }

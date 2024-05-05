@@ -10,11 +10,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.ClickType;
 import net.minecraft.world.World;
-
-import java.util.Optional;
 
 public class MortarItem extends Item {
 	public MortarItem(Settings settings) {
@@ -26,36 +25,47 @@ public class MortarItem extends Item {
 		return false;
 	}
 
-	@Override
-	public boolean onClicked(ItemStack thisStack, ItemStack otherStack, Slot thisSlot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference) {
-		World world = player.getWorld();
+	public boolean tryCraftItem(World world, PlayerEntity player, ItemStack mortarStack, ItemStack inputStack) {
+		SimpleInventory inventory = new SimpleInventory(inputStack);
+		final int maxDamage = mortarStack.isDamageable() ? mortarStack.getMaxDamage() - mortarStack.getDamage() : Integer.MAX_VALUE;
+		final boolean mortarCanBeDamaged = mortarStack.isDamageable();
+		MortarRecipe recipe = world.getRecipeManager()
+				.getAllMatches(ModRecipes.MORTAR_RECIPE, inventory, world)
+				.stream()
+				.map(RecipeEntry::value)
+				.filter(mortarRecipe->!mortarCanBeDamaged || (!mortarRecipe.canDamage() || mortarRecipe.getDamage() <= maxDamage))
+				.findFirst()
+				.orElse(null);
 
-		if (clickType == ClickType.RIGHT) {
-			ItemStack input = cursorStackReference.get();
+		if (recipe == null) return false; // Check if a recipe was found
+		ItemStack resultStack = recipe.craft(inventory, world.getRegistryManager());
 
-			SimpleInventory inventory = new SimpleInventory(1);
-			inventory.setStack(0, new ItemStack(input.getItem(), 1));
-			Optional<MortarRecipe> match = world.getRecipeManager().getFirstMatch(ModRecipes.MORTAR_RECIPE, inventory, world).map(RecipeEntry::value);
+		if (resultStack.isEmpty()) return false;
 
-			if (match.isEmpty()) return false; // Check if a recipe was found
-
-			if (!player.isCreative()) input.decrement(1);
-
-			MortarRecipe recipe = match.get();
-
-			ItemStack output = recipe.getResult(null).copy();
-			if (!player.getInventory().insertStack(output)) {
-				player.dropStack(output); // Drop the remains
+		if (!world.isClient()) {
+			if (!player.isCreative() && recipe.canDamage() && mortarCanBeDamaged) {
+				mortarStack.damage(recipe.getDamage(), world.getRandom(), player instanceof ServerPlayerEntity serverPlayer ? serverPlayer : null, ()->{});
 			}
-
-			world.playSound(null, player.getBlockPos(), ModSoundEvents.MORTAR_SOUND_CLICK, SoundCategory.PLAYERS);
-
-			boolean canDamage = recipe.canDamage() && !player.isCreative();
-			if (canDamage) thisStack.setDamage(thisStack.getDamage() + recipe.getDamage()); // Damage the item
-
-			return true;
-		} else {
-			return false;
+			inputStack.decrement(1);
+			player.getInventory().offerOrDrop(inputStack.getRecipeRemainder());
+			player.getInventory().offerOrDrop(resultStack);
 		}
+
+		world.playSound(player, player.getBlockPos(), ModSoundEvents.MORTAR_SOUND_CLICK, SoundCategory.PLAYERS);
+		return true;
+	}
+
+	@Override
+	public boolean onStackClicked(ItemStack mortarStack, Slot inputSlot, ClickType clickType, PlayerEntity player) {
+		// clicking a stack with the mortar
+		if (clickType.equals(ClickType.RIGHT) && inputSlot.hasStack()) return tryCraftItem(player.getWorld(), player, mortarStack, inputSlot.getStack());
+		return super.onStackClicked(mortarStack, inputSlot, clickType, player);
+	}
+
+	@Override
+	public boolean onClicked(ItemStack mortarStack, ItemStack inputStack, Slot thisSlot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference) {
+		// clicking the mortar with a stack
+		if (clickType.equals(ClickType.RIGHT) && !inputStack.isEmpty()) return tryCraftItem(player.getWorld(), player, mortarStack, inputStack);
+		return super.onClicked(mortarStack, inputStack, thisSlot, clickType, player, cursorStackReference);
 	}
 }

@@ -4,8 +4,10 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.luckius.luckius_mortar.datagen.model.ModItemModelGenerator;
 import net.luckius.luckius_mortar.datagen.recipe.ModRecipeGenerator;
-import net.luckius.luckius_mortar.datagen.tag.ModItemTags;
+import net.luckius.luckius_mortar.datagen.tag.ModItemTagGenerator;
+import net.luckius.luckius_mortar.item.ModItemTags;
 import net.luckius.luckius_mortar.item.ModItems;
 import net.minecraft.registry.RegistryWrapper;
 
@@ -16,22 +18,9 @@ public class LuckiusMortarDatagen implements DataGeneratorEntrypoint {
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
         final FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
-        pack.addProvider(ItemTagGenerator::new);
+        pack.addProvider(ModItemTagGenerator::new);
         pack.addProvider(ModRecipeGenerator::new);
+        pack.addProvider(ModItemModelGenerator::new);
     }
 
-    private static class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
-        public ItemTagGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
-            super(output, completableFuture);
-        }
-
-        @Override
-        protected void configure(RegistryWrapper.WrapperLookup arg) {
-            getOrCreateTagBuilder(ModItemTags.MORTARS)
-                    .add(ModItems.WOODEN_MORTAR)
-                    .add(ModItems.STONE_MORTAR)
-                    .add(ModItems.IRON_MORTAR)
-                    .add(ModItems.DIAMOND_MORTAR);
-        }
-    }
 }

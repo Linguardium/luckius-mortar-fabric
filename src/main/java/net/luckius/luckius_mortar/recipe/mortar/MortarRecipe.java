@@ -7,7 +7,6 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
-import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 
@@ -19,7 +18,7 @@ public class MortarRecipe implements Recipe<Inventory> {
 	public MortarRecipe(Ingredient input, ItemStack output, int damage) {
 		this.input = input;
 		this.output = output;
-		this.damage = damage;
+		this.damage = Math.max(damage,0);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package net.luckius.luckius_mortar.datagen.tag;
+package net.luckius.luckius_mortar.item;
 
 import net.luckius.luckius_mortar.LuckiusMortar;
 import net.minecraft.item.Item;

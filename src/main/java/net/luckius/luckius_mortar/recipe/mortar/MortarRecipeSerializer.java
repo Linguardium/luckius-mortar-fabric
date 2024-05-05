@@ -1,26 +1,20 @@
 package net.luckius.luckius_mortar.recipe.mortar;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.ShapelessRecipe;
-import net.minecraft.registry.Registries;
+import net.minecraft.util.dynamic.Codecs;
 
 public class MortarRecipeSerializer implements RecipeSerializer<MortarRecipe> {
-	// TODO: standardize result format to standard output format and use ItemStack.RECIPE_RESULT_CODEC
 	MapCodec<MortarRecipe> CODEC = RecordCodecBuilder.mapCodec(instance->instance.group(
-			Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("ingredient").forGetter(MortarRecipe::getInput),
+			Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("ingredient").forGetter(recipe->recipe.input),
 			ItemStack.VALIDATED_CODEC.fieldOf("result").forGetter(recipe->recipe.output),
-			Codec.INT.optionalFieldOf("damage",0).forGetter(MortarRecipe::getDamage)
-	).apply(instance,(ingredient,result,damage)->new MortarRecipe(ingredient,result,Math.max(damage,0))));
-
+			Codecs.NONNEGATIVE_INT.optionalFieldOf("damage",0).forGetter(recipe->recipe.damage)
+	).apply(instance,MortarRecipe::new));
 
 	public static final PacketCodec<RegistryByteBuf, MortarRecipe> PACKET_CODEC = PacketCodec.ofStatic(MortarRecipeSerializer::write, MortarRecipeSerializer::read);
 
@@ -33,7 +27,6 @@ public class MortarRecipeSerializer implements RecipeSerializer<MortarRecipe> {
 	public PacketCodec<RegistryByteBuf, MortarRecipe> packetCodec() {
 		return PACKET_CODEC;
 	}
-
 
 	public static MortarRecipe read(RegistryByteBuf buf) {
 		var input = Ingredient.PACKET_CODEC.decode(buf);

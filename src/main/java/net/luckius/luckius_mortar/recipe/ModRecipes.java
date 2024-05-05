@@ -9,16 +9,20 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 import static net.luckius.luckius_mortar.LuckiusMortar.MOD_ID;
+import static net.luckius.luckius_mortar.LuckiusMortar.makeId;
 
 public class ModRecipes {
-	public static final RecipeType<MortarRecipe> MORTAR_RECIPE = Registry.register(Registries.RECIPE_TYPE, new Identifier(MOD_ID, "mortar"),
+	private static final Identifier RECIPE_TYPE_IDENTIFIER = makeId("mortar");
+	public static final RecipeType<MortarRecipe> MORTAR_RECIPE = Registry.register(Registries.RECIPE_TYPE, RECIPE_TYPE_IDENTIFIER,
 		new RecipeType<MortarRecipe>() {
 			public String toString() {
-				return MOD_ID+":mortar";
+				return RECIPE_TYPE_IDENTIFIER.toString();
 			}
 		}
 	);
-	public static final RecipeSerializer<MortarRecipe> MORTAR_RECIPE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(MOD_ID, "mortar"),new MortarRecipeSerializer());
+	public static final RecipeSerializer<MortarRecipe> MORTAR_RECIPE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, RECIPE_TYPE_IDENTIFIER,new MortarRecipeSerializer());
 
-	public static void init() {};
+	public static void init() {
+		// empty method used to classload
+	};
 }

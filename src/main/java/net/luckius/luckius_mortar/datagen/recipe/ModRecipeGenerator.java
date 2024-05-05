@@ -14,6 +14,7 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
@@ -21,6 +22,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.concurrent.CompletableFuture;
 
+import static net.luckius.luckius_mortar.LuckiusMortar.makeId;
 import static net.luckius.luckius_mortar.item.ModItems.*;
 
 public class ModRecipeGenerator extends FabricRecipeProvider {
@@ -34,6 +36,7 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
         offerMortarRecipe(exporter, ItemTags.PLANKS, WOODEN_MORTAR);
         offerMortarRecipe(exporter, ConventionalItemTags.STONES, STONE_MORTAR);
         offerMortarRecipe(exporter, Items.IRON_INGOT, IRON_MORTAR);
+
         offerMortarTypeRecipe(exporter, Items.BONE, Items.BONE_MEAL, 3, 1);
         offerMortarTypeRecipe(exporter, Items.GRAVEL, Items.FLINT, 1, 1);
     }
@@ -47,7 +50,7 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
                 .input('D',bowlIngredient)
                 .input('F',Items.FLINT)
                 .criterion("has_item", conditionsFromItem(bowlIngredient))
-                .offerTo(exporter, getRecipeName(output));
+                .offerTo(exporter, Registries.ITEM.getId(output.asItem()).withPrefixedPath("shaped/"));
     }
     private void offerMortarRecipe(RecipeExporter exporter, TagKey<Item> bowlIngredient, ItemConvertible output) {
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, output)
@@ -58,17 +61,17 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
                 .input('D',bowlIngredient)
                 .input('F',Items.FLINT)
                 .criterion("has_item", conditionsFromTag(bowlIngredient))
-                .offerTo(exporter, getRecipeName(output));
+                .offerTo(exporter, Registries.ITEM.getId(output.asItem()).withPrefixedPath("shaped/") );
     }
     private void offerMortarTypeRecipe(RecipeExporter exporter, ItemConvertible input, ItemConvertible output, int count, int damage) {
         exporter.accept(
-                new Identifier(LuckiusMortar.MOD_ID,"mortar_"+getRecipeName(output)),
+                makeId("mortar/"+getRecipeName(output)),
                 new MortarRecipe(
                         Ingredient.ofItems(input),
                         output.asItem().getDefaultStack().copyWithCount(count),
                         damage
                 ),
-                        null
+                null // no advancement handling in recipe type
         );
     }
 
